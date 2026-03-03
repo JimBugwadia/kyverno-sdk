@@ -61,6 +61,9 @@ func (*lib) extendEnv(env *cel.Env) (*cel.Env, error) {
 		"unmarshal": {
 			cel.MemberOverload("unmarshal_string_dyn", []*cel.Type{JsonType, types.DynType}, types.DynType, cel.BinaryBinding(impl.unmarshal)),
 		},
+		"marshal": {
+			cel.MemberOverload("marshal_dyn_string", []*cel.Type{JsonType, types.DynType}, types.StringType, cel.BinaryBinding(impl.marshal)),
+		},
 	}
 	// create env options corresponding to our function overloads
 	options := []cel.EnvOption{}

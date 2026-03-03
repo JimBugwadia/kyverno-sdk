@@ -11,15 +11,40 @@ type impl struct {
 }
 
 func (i *impl) unmarshal(json ref.Val, value ref.Val) ref.Val {
-	if json, err := utils.ConvertToNative[Json](json); err != nil {
+	if jsonVal, err := utils.ConvertToNative[Json](json); err != nil {
 		return types.WrapErr(err)
 	} else if value, err := utils.ConvertToNative[string](value); err != nil {
 		return types.WrapErr(err)
 	} else {
-		if value, err := json.Unmarshal([]byte(value)); err != nil {
+		if value, err := jsonVal.Unmarshal([]byte(value)); err != nil {
 			return types.WrapErr(err)
 		} else {
 			return i.NativeToValue(value)
 		}
+	}
+}
+
+func (i *impl) marshal(jsonObj ref.Val, value ref.Val) ref.Val {
+	if jsonVal, err := utils.ConvertToNative[Json](jsonObj); err != nil {
+		return types.WrapErr(err)
+	} else if native, err := toJsonNative(value); err != nil {
+		return types.WrapErr(err)
+	} else {
+		if data, err := jsonVal.Marshal(native); err != nil {
+			return types.WrapErr(err)
+		} else {
+			return i.NativeToValue(string(data))
+		}
+	}
+}
+
+func toJsonNative(val ref.Val) (any, error) {
+	switch val.Type() {
+	case types.MapType:
+		return utils.ConvertToNative[map[string]any](val)
+	case types.ListType:
+		return utils.ConvertToNative[[]any](val)
+	default:
+		return val.Value(), nil
 	}
 }

@@ -10,6 +10,7 @@ var JsonType = types.NewOpaqueType("json.Json")
 
 type JsonIface interface {
 	Unmarshal([]byte) (any, error)
+	Marshal(any) ([]byte, error)
 }
 
 type Json struct {
@@ -24,4 +25,8 @@ func (j *JsonImpl) Unmarshal(content []byte) (any, error) {
 		return nil, err
 	}
 	return v, nil
+}
+
+func (j *JsonImpl) Marshal(v any) ([]byte, error) {
+	return json.Marshal(v)
 }
