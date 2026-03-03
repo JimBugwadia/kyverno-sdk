@@ -51,7 +51,7 @@ func (c *lib) CompileOptions() []cel.EnvOption {
 					if err != nil {
 						return types.WrapErr(err)
 					}
-					var cron string = ""
+					cron := ""
 					cron += strconv.Itoa(ts.Minute()) + " "
 					cron += strconv.Itoa(ts.Hour()) + " "
 					cron += strconv.Itoa(ts.Day()) + " "

@@ -74,11 +74,25 @@ func TestTransformer_Result_TransformsInnerResult(t *testing.T) {
 
 func TestTransformer_ImplementsResulter(t *testing.T) {
 	ctx := context.Background()
-	collect := func(policy string, in int, out bool) struct{ P string; I int; O bool } {
-		return struct{ P string; I int; O bool }{policy, in, out}
-	}
-	result := func(s []struct{ P string; I int; O bool }) int { return len(s) }
-	inner := NewAppender[string, int, struct{ P string; I int; O bool }]()
+	collect := func(policy string, in int, out bool) struct {
+		P string
+		I int
+		O bool
+	} { return struct {
+		P string
+		I int
+		O bool
+	}{policy, in, out} }
+	result := func(s []struct {
+		P string
+		I int
+		O bool
+	}) int { return len(s) }
+	inner := NewAppender[string, int, struct {
+		P string
+		I int
+		O bool
+	}]()
 
 	var _ core.Resulter[string, int, bool, int] = NewTransformer(collect, result, inner)
 

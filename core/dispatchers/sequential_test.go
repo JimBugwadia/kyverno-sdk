@@ -130,8 +130,8 @@ func (c *countCollector) Collect(_ context.Context, _ string, _ int, _ bool) {
 
 type collectItem struct {
 	policy string
-	in    int
-	out   bool
+	in     int
+	out    bool
 }
 
 type sliceCollector struct {

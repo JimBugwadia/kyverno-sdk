@@ -86,8 +86,8 @@ func (r *fixedResulter) Result() string {
 
 type collectItem struct {
 	Policy string
-	In    int
-	Out   bool
+	In     int
+	Out    bool
 }
 
 type sliceResulter struct {

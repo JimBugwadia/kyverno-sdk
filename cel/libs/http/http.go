@@ -59,7 +59,7 @@ func (r *contextImpl) executeRequest(client ClientInterface, req *http.Request) 
 	if err != nil {
 		return nil, fmt.Errorf("request failed: %w", err)
 	}
-	defer resp.Body.Close()
+	defer func() { _ = resp.Body.Close() }()
 
 	var body any
 	if resp.Body != nil {
