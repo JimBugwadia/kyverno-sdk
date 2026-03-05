@@ -127,10 +127,10 @@ func (r *apiSource[API, API_PTR]) Reconcile(ctx context.Context, req ctrl.Reques
 		return ctrl.Result{}, err
 	}
 
-	// Object created or updated — store in cache
+	// Object created or updated — store a copy in cache so we don't retain a pointer to stack
 	r.lock.Lock()
 	defer r.lock.Unlock()
-	r.resources[req.String()] = ptr
+	r.resources[req.String()] = ptr.DeepCopyObject().(API_PTR)
 	return ctrl.Result{}, nil
 }
 
