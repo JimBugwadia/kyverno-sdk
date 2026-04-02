@@ -282,8 +282,21 @@ func (r *contextImpl) matchesAllowlist(reqURL *url.URL) bool {
 		if entryPath == "" || entryPath == "/" {
 			return true
 		}
-		if strings.HasPrefix(reqURL.Path, entryPath) {
+		// Require either an exact path match, or a prefix match that aligns with
+		// a path-segment boundary. This avoids matching "/v10/..." when the
+		// allowlist entry is "/v1".
+		if reqURL.Path == entryPath {
 			return true
+		}
+		if strings.HasPrefix(reqURL.Path, entryPath) {
+			// If the allowlist path ends with "/", treat it as a directory prefix.
+			if entryPath[len(entryPath)-1] == '/' {
+				return true
+			}
+			// Otherwise, require the next character after the prefix to be "/".
+			if len(reqURL.Path) > len(entryPath) && reqURL.Path[len(entryPath)] == '/' {
+				return true
+			}
 		}
 	}
 	return false
