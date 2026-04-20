@@ -65,22 +65,35 @@ safe-outputs:
 
               echo "Updating branch for PR #$PR_NUMBER..."
 
-              HTTP_STATUS=$(gh api \
+              RESPONSE_FILE=$(mktemp)
+              gh api \
+                --include \
                 --method PUT \
                 -H "Accept: application/vnd.github+json" \
                 "/repos/$REPO/pulls/$PR_NUMBER/update-branch" \
-                --jq '.message' 2>&1)
+                > "$RESPONSE_FILE" 2>&1
               EXIT_CODE=$?
 
-              if [ $EXIT_CODE -eq 0 ] && echo "$HTTP_STATUS" | grep -qi "scheduled"; then
+              STATUS_CODE=$(grep -m1 -E '^HTTP/' "$RESPONSE_FILE" | awk '{print $2}')
+              RESPONSE_BODY=$(awk 'BEGIN { body=0 } body { print } /^(\r)?$/ { body=1 }' "$RESPONSE_FILE")
+
+              if [ -n "$RESPONSE_BODY" ] && echo "$RESPONSE_BODY" | jq -e . >/dev/null 2>&1; then
+                RESPONSE_MESSAGE=$(echo "$RESPONSE_BODY" | jq -r '.message // empty')
+              else
+                RESPONSE_MESSAGE=$(cat "$RESPONSE_FILE")
+              fi
+
+              if [ $EXIT_CODE -eq 0 ] && echo "$RESPONSE_MESSAGE" | grep -qi "scheduled"; then
                 echo "  ✓ PR #$PR_NUMBER — branch update scheduled"
                 UPDATED=$((UPDATED + 1))
-              elif echo "$HTTP_STATUS" | grep -qi "already up"; then
+              elif [ $EXIT_CODE -eq 0 ] && echo "$RESPONSE_MESSAGE" | grep -qi "already up"; then
                 echo "  - PR #$PR_NUMBER — already up-to-date, skipping"
               else
-                echo "  ✗ PR #$PR_NUMBER — update failed (exit $EXIT_CODE): $HTTP_STATUS"
+                echo "  ✗ PR #$PR_NUMBER — update failed (exit $EXIT_CODE, http ${STATUS_CODE:-unknown}): $RESPONSE_MESSAGE"
                 FAILED=$((FAILED + 1))
               fi
+
+              rm -f "$RESPONSE_FILE"
             done
 
             echo ""
