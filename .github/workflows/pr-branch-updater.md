@@ -42,7 +42,11 @@ safe-outputs:
           env:
             GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
             REPO: ${{ github.repository }}
+            GITHUB_SERVER_URL: ${{ github.server_url }}
           run: |
+            GH_HOST="${GITHUB_SERVER_URL#https://}"
+            GH_HOST="${GH_HOST#http://}"
+            export GH_HOST
             if [ ! -f "$GH_AW_AGENT_OUTPUT" ]; then
               echo "No agent output found"
               exit 1
