@@ -4,7 +4,7 @@ go 1.26.0
 
 require (
 	github.com/awslabs/amazon-ecr-credential-helper/ecr-login v0.12.0
-	github.com/fluxcd/pkg/oci v0.45.0
+	github.com/fluxcd/pkg/oci v0.46.0
 	github.com/go-logr/logr v1.4.3
 	github.com/google/cel-go v0.29.2
 	github.com/google/go-containerregistry v0.21.5
@@ -18,12 +18,12 @@ require (
 	go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp v0.69.0
 	go.opentelemetry.io/otel/trace v1.44.0
 	go.uber.org/multierr v1.11.0
-	golang.org/x/crypto v0.54.0
+	golang.org/x/crypto v0.58.0
 	golang.org/x/exp v0.0.0-20260410095643-746e56fc9e2f
-	golang.org/x/sync v0.22.0
+	golang.org/x/sync v0.24.0
 	google.golang.org/protobuf v1.36.12-0.20260120151049-f2248ac996af
 	k8s.io/api v0.37.0
-	k8s.io/apimachinery v0.37.0
+	k8s.io/apimachinery v0.37.1
 	k8s.io/apiserver v0.37.0
 	k8s.io/client-go v0.37.0
 	sigs.k8s.io/controller-runtime v0.25.2
@@ -115,11 +115,11 @@ require (
 	go.opentelemetry.io/otel/metric v1.44.0 // indirect
 	go.yaml.in/yaml/v2 v2.4.4 // indirect
 	go.yaml.in/yaml/v3 v3.0.4 // indirect
-	golang.org/x/net v0.57.0 // indirect
+	golang.org/x/net v0.60.0 // indirect
 	golang.org/x/oauth2 v0.36.0 // indirect
-	golang.org/x/sys v0.47.0 // indirect
-	golang.org/x/term v0.45.0 // indirect
-	golang.org/x/text v0.40.0 // indirect
+	golang.org/x/sys v0.49.0 // indirect
+	golang.org/x/term v0.47.0 // indirect
+	golang.org/x/text v0.43.0 // indirect
 	golang.org/x/time v0.15.0 // indirect
 	gomodules.xyz/jsonpatch/v2 v2.5.0 // indirect
 	google.golang.org/genproto/googleapis/api v0.0.0-20260526163538-3dc84a4a5aaa // indirect
